@@ -1,12 +1,10 @@
 const path = require('path')
-const webpackNodeExternals = require('webpack-node-externals')
 
 module.exports = {
-  target: 'node',
-  entry: './src/server.js',
+  entry: './src/client.js',
   output: {
     filename: 'bundle.js',
-    path: path.resolve(__dirname, 'build')
+    path: path.resolve(__dirname, 'public')
   },
   module: {
     rules: [
@@ -25,3 +23,4 @@ module.exports = {
     ]
   }
 }
+
