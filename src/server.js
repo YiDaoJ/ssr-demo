@@ -1,16 +1,21 @@
 import React from 'react'
 import express from 'express'
 import { renderToString } from 'react-dom/server'
-import Home from './components/Home'
+import Helmet from 'react-helmet'
+import App from './App'
 
 const app = express()
 
 const renderer = () => {
-  const content = renderToString(<Home />)
+  const content = renderToString(<App />)
+
+  const helmet = Helmet.renderStatic()
 
   return `
     <html>
       <head>
+      ${helmet.title.toString()}
+      ${helmet.meta.toString()}
       </head>
       <body>
         <div id="root">${content}</div>
@@ -25,8 +30,7 @@ const renderer = () => {
 app.use(express.static('public'))
 
 app.get('/', (req, res) => {
-  const content = renderToString(<Home />)
-  res.send(content)
+  res.send(renderer())
 })
 
 app.listen(8080, console.log('Listening on port 8080'))
