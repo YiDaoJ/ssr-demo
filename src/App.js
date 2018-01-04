@@ -4,7 +4,7 @@ import Helmet from 'react-helmet'
 import Header from './components/Header'
 import Home from './components/Home'
 import About from './components/About'
-import Login from './components/Login'
+import LoginPageContainer from './components/containers/LoginPageContainer'
 
 const App = ({route}) => {
   return (
@@ -12,13 +12,19 @@ const App = ({route}) => {
       <Helmet>
         <title>React SSR</title>
         <meta name="description" content="Meine Beschreibung"/>
+        <link rel="icon" href={`http://localhost:8080/favicon.ico`} />
       </Helmet>
       <Header />
-      <Switch>
-        <Route component={Home} path="/" exact />
-        <Route component={About} path="/about" />
-        <Route component={Login} path="/login" />
-      </Switch>
+      <div
+        style={{ backgroundColor: '#FAFAFA', height: '100%', width: '100%', display: 'flex', paddingTop: 60 }}
+      >
+        <Switch>
+          <Route component={Home} path="/" exact />
+          <Route component={About} path="/about" />
+          <Route component={LoginPageContainer} path="/login" />
+        </Switch>
+      </div>
+
 
     </div>
   );

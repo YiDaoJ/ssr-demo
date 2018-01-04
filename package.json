@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "express": "^4.16.2",
     "jss-preset-default": "^4.0.1",
     "material-ui": "^1.0.0-beta.26",
@@ -26,17 +27,18 @@
     "react-router-dom": "^4.2.2",
     "redux": "^3.7.2",
     "styled-components": "^2.4.0",
-    "typeface-roboto": "0.0.45"
+    "typeface-roboto": "0.0.45",
+    "validator": "^9.2.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
+    "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-preset-env": "^1.6.1",
     "babel-preset-es2015": "^6.24.1",
-    "babel-preset-es2017": "^6.24.1",
     "babel-preset-react": "^6.24.1",
-    "babel-preset-stage-0": "^6.24.1",
+    "babel-preset-stage-1": "^6.24.1",
     "body-parser": "^1.18.2",
     "nodemon": "^1.14.7",
     "prettier": "^1.9.2",

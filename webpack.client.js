@@ -9,15 +9,10 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js?$/,
-        loader: 'babel-loader',
-        exclude: /node_modules/,
-        options: {
-          presets: [
-            'react',
-            'stage-0',
-            ['env', { targets: { browsers: ['last 2 versions'] } }]
-          ]
+        test: /\.js$/,
+        exclude: /(node_modules|bower_components)/,
+        use: {
+          loader: 'babel-loader'
         }
       }
     ]

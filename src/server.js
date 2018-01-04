@@ -16,29 +16,29 @@ import Helmet from 'react-helmet'
 import App from './App'
 import theme from './styles/theme'
 
-const Html = ({ content, css }) => {
+// const Html = ({ content, css }) => {
 
-  const helmet = Helmet.renderStatic()
+//   const helmet = Helmet.renderStatic()
 
-  return `
-    <html>
-      <head>
-        ${helmet.title.toString()}
-        ${helmet.meta.toString()}
-        <style>
-          ${'*, *:after, *:before { box-sizing: border-box; }'}
-          ${'html, body, main { height: 100%;position: relative;}'}
-          ${'body {margin: 0;overflow: hidden;}'}
-        </style>
-      </head>
-      <body>
-        <div id="root">${content}</div>
-        <style id="jss-server-side">${css}</style>
-        <script src="bundle.js"></script>
-      </body>
-    </html>
-  `
-}
+//   return `
+//     <html>
+//       <head>
+//         ${helmet.title.toString()}
+//         ${helmet.meta.toString()}
+//         <style>
+//           ${'*, *:after, *:before { box-sizing: border-box; }'}
+//           ${'html, body, main { height: 100%;position: relative;}'}
+//           ${'body {margin: 0;overflow: hidden;}'}
+//         </style>
+//       </head>
+//       <body>
+//         <div id="root">${content}</div>
+//         <style id="jss-server-side">${css}</style>
+//         <script src="bundle.js"></script>
+//       </body>
+//     </html>
+//   `
+// }
 
 
 const renderer = req => {
@@ -64,25 +64,25 @@ const renderer = req => {
 
   const css = sheetsRegistry.toString()
 
-  return Html(content, css)
-  // `
-  //   <html>
-  //     <head>
-  //       ${helmet.title.toString()}
-  //       ${helmet.meta.toString()}
-  //       <style>
-  //         ${'*, *:after, *:before { box-sizing: border-box; }'}
-  //         ${'html, body, main { height: 100%;position: relative;}'}
-  //         ${'body {margin: 0;overflow: hidden;}'}
-  //       </style>
-  //     </head>
-  //     <body>
-  //       <div id="root">${content}</div>
-  //       <style id="jss-server-side">${css}</style>
-  //       <script src="bundle.js"></script>
-  //     </body>
-  //   </html>
-  // `
+  return `
+    <html>
+      <head>
+        ${helmet.title.toString()}
+        ${helmet.meta.toString()}
+        ${helmet.link.toString()}
+        <style>
+          ${'*, *:after, *:before { box-sizing: border-box; }'}
+          ${'html, body, main { height: 100%;position: relative;}'}
+          ${'body {margin: 0;overflow: hidden;}'}
+        </style>
+      </head>
+      <body>
+        <div id="root">${content}</div>
+        <style id="jss-server-side">${css}</style>
+        <script src="bundle.js"></script>
+      </body>
+    </html>
+  `
 }
 
 
