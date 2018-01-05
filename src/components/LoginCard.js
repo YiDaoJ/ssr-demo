@@ -3,6 +3,7 @@ import { object, func } from 'prop-types'
 import { Link } from 'react-router-dom'
 import { Card, CardActions, CardContent, Button, Typography } from 'material-ui'
 import { withStyles } from 'material-ui/styles'
+import { FormattedMessage } from 'react-intl'
 import loginStyle from '../styles/loginStyle'
 import LoginForm from './LoginForm'
 
@@ -13,7 +14,7 @@ const LoginCard = props => {
       <CardContent className={classes.loginCardContent}>
         <div className={classes.cardTitle}>
           <Typography type="headline" style={{ textAlign: 'center', paddingTop: '100px' }}>
-          Login
+            <FormattedMessage id="auth.login" defaultMessage="Login" />
           </Typography>
         </div>
         <LoginForm {...props} />
@@ -27,7 +28,7 @@ const LoginCard = props => {
           raised
           className={classes.loginBtn}
           onClick={props.onSubmit}>
-          Login
+          <FormattedMessage id="auth.login" defaultMessage="Login" />
         </Button>
       </CardActions>
     </Card>

@@ -10,7 +10,7 @@ class LoginPageContainer extends Component {
   //   this.props.login(loginData).then(() => this.props.history.push('/'))
 
   render() {
-    return <Login />
+    return <Login {...this.props} />
   }
 }
 
@@ -22,9 +22,9 @@ const mapDispatchToProps = dispatch => ({
 })
 
 LoginPageContainer.propTypes = {
-  history: shape({
-    push: func.isRequired
-  }).isRequired,
+  // history: shape({
+  //   push: func.isRequired
+  // }).isRequired,
   // login: func.isRequired
 }
 

@@ -5,6 +5,11 @@ import { MuiThemeProvider } from 'material-ui/styles';
 import App from './App'
 import theme from './styles/theme'
 
+// if(localStorage.i18nLang) {
+//   console.log(localStorage.i18nLang)
+// }
+
+
 ReactDOM.hydrate(
   <MuiThemeProvider theme={theme} >
     <BrowserRouter>

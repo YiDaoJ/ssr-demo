@@ -1,49 +1,54 @@
 import React from 'react'
 import { object, func } from 'prop-types'
+import { injectIntl, intlShape, FormattedMessage} from 'react-intl';
 import { TextField, FormHelperText } from 'material-ui'
 import { withStyles } from 'material-ui/styles'
 import loginStyle from '../styles/loginStyle'
+import messages from '../messages'
 
-const LoginForm = ({ loginData, errors, onChange, ...props }) => {
+const LoginForm = ({ loginData, errors, onChange, lang, ...props }) => {
   const { classes } = props
+  const {formatMessage} = props.intl
+  const formatLabel = formatMessage(messages[lang].label)
 
   return (
-    <form style={{ width: '100%', margin: '0 auto' }}>
-      <div style={{ height: '60px' }}>
+      <form style={{ width: '100%', margin: '0 auto' }}>
+        <div style={{ height: '60px' }}>
+          <TextField
+            error={!!errors.email}
+            label="Email"
+            type="email"
+            name="email"
+            value={loginData.email}
+            className={classes.inputField}
+            margin="normal"
+            InputProps={{ style: { width: '100%' } }}
+            onChange={onChange}
+          />
+          {errors.email && (
+            <FormHelperText className={classes.errorMessage}>
+              {errors.email}
+            </FormHelperText>
+          )}
+        </div>
         <TextField
-          error={!!errors.email}
-          label="Email"
-          type="email"
-          name="email"
-          value={loginData.email}
+          error={!!errors.password}
+          label={formatMessage(messages[lang].label)}
+          type="password"
+          name={formatLabel.toLowerCase()}
+          value={loginData.password}
           className={classes.inputField}
           margin="normal"
           InputProps={{ style: { width: '100%' } }}
           onChange={onChange}
         />
-        {errors.email && (
+        {errors.password && (
           <FormHelperText className={classes.errorMessage}>
-            {errors.email}
+            {errors.password}
           </FormHelperText>
         )}
-      </div>
-      <TextField
-        error={!!errors.password}
-        label="Password"
-        type="password"
-        name="password"
-        value={loginData.password}
-        className={classes.inputField}
-        margin="normal"
-        InputProps={{ style: { width: '100%' } }}
-        onChange={onChange}
-      />
-      {errors.password && (
-        <FormHelperText className={classes.errorMessage}>
-          {errors.password}
-        </FormHelperText>
-      )}
-    </form>
+      </form>
+
   )
 }
 
@@ -53,5 +58,5 @@ LoginForm.propTypes = {
   errors: object,
   onChange: func
 }
-
-export default withStyles(loginStyle)(LoginForm)
+const multiLangForm = injectIntl(LoginForm)
+export default withStyles(loginStyle)(multiLangForm)

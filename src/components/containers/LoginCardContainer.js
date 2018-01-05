@@ -3,6 +3,7 @@ import { func } from 'prop-types'
 import Validator from 'validator'
 import bcrypt from 'bcryptjs'
 import LoginCard from '../LoginCard'
+import { error } from 'util';
 
 // const LoginCardContainer = props => <LoginCard {...props} />
 
@@ -15,6 +16,10 @@ class LoginCardContainer extends Component {
     },
     loading: false,
     errors: {}
+  }
+
+  componentWillReceiveProps(nextprops) {
+    this.checkErrors(this.state.errors, nextprops.lang)
   }
 
   // componentWillMount() {
@@ -31,7 +36,7 @@ class LoginCardContainer extends Component {
   }
 
   onSubmit = () => {
-    const errors = this.validate(this.state.loginData)
+    const errors = this.validate(this.state.loginData, this.props.lang)
     const passwordHash =
       this.state.loginData.password &&
       bcrypt.hashSync(this.state.loginData.password, 10)
@@ -54,10 +59,31 @@ class LoginCardContainer extends Component {
     )
   }
 
-  validate = loginData => {
+  validate = (loginData, lang) => {
     const errors = {}
-    if (!Validator.isEmail(loginData.email)) errors.email = 'Invalid email'
-    if (!loginData.password) errors.password = "Password can't be blank"
+    if (!Validator.isEmail(loginData.email))
+      lang === 'de' ? errors.email = 'Ungültige E-Mail': errors.email = 'Invalid email'
+
+
+    if (!loginData.password)
+      lang === 'de' ?
+        errors.password = 'Das Passwort darf nicht leer sein':
+        errors.password = "Password can't be blank";
+
+    this.setState({errors})
+    return errors
+  }
+
+  checkErrors = (errors, lang) => {
+    if (errors.email)
+      lang === 'de' ? errors.email = 'Ungültige E-Mail': errors.email = 'Invalid email'
+
+    if (errors.password)
+      lang === 'de' ?
+        errors.password = 'Das Passwort darf nicht leer sein':
+        errors.password = "Password can't be blank";
+
+    this.setState({errors})
     return errors
   }
 
