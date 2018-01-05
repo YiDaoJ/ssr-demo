@@ -62,7 +62,7 @@ class LoginCardContainer extends Component {
   validate = (loginData, lang) => {
     const errors = {}
     if (!Validator.isEmail(loginData.email))
-      lang === 'de' ? errors.email = 'Ungültige E-Mail': errors.email = 'Invalid email'
+      lang === 'de' ? errors.email = 'Ungültige Email': errors.email = 'Invalid email'
 
 
     if (!loginData.password)
@@ -76,7 +76,7 @@ class LoginCardContainer extends Component {
 
   checkErrors = (errors, lang) => {
     if (errors.email)
-      lang === 'de' ? errors.email = 'Ungültige E-Mail': errors.email = 'Invalid email'
+      lang === 'de' ? errors.email = 'Ungültige Email': errors.email = 'Invalid email'
 
     if (errors.password)
       lang === 'de' ?

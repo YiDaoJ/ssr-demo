@@ -58,7 +58,6 @@ class App extends Component {
               <Route component={Home} path="/" exact />
               <Route component={About} path="/about" />
               <Route render={ () => <LoginPageContainer lang={lang} />} path="/login" />
-
             </Switch>
           </div>
         </div>

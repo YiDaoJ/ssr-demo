@@ -1,6 +1,6 @@
 import React from 'react'
 import { object, func } from 'prop-types'
-import { injectIntl, intlShape, FormattedMessage} from 'react-intl';
+import { injectIntl, FormattedMessage} from 'react-intl';
 import { TextField, FormHelperText } from 'material-ui'
 import { withStyles } from 'material-ui/styles'
 import loginStyle from '../styles/loginStyle'
@@ -22,7 +22,8 @@ const LoginForm = ({ loginData, errors, onChange, lang, ...props }) => {
             value={loginData.email}
             className={classes.inputField}
             margin="normal"
-            InputProps={{ style: { width: '100%' } }}
+            InputLabelProps={{ style: { color: !!errors.email ? '#FF8F00' : undefined } }}
+            InputProps={{ style: { width: '100%' }, className: classes.afterInput}}
             onChange={onChange}
           />
           {errors.email && (
@@ -39,7 +40,8 @@ const LoginForm = ({ loginData, errors, onChange, lang, ...props }) => {
           value={loginData.password}
           className={classes.inputField}
           margin="normal"
-          InputProps={{ style: { width: '100%' } }}
+          InputLabelProps={{ style: { color: !!errors.email ? '#FF8F00' : undefined } }}
+          InputProps={{ style: { width: '100%' }, className: classes.afterInput }}
           onChange={onChange}
         />
         {errors.password && (

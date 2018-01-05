@@ -39,13 +39,19 @@ const LoginStyle = {
 
   errorMessage: {
     fontSize: '14px',
-    color: '#ff1744',
+    color: '#FF8F00',
     fontWeight: 'bold'
   },
 
   forgotPWLink: {
     textDecoration: 'none',
     color: '#FFF !important'
+  },
+
+  afterInput: {
+    '&:after': {
+      backgroundColor: '#FF8F00'
+    }
   },
 
   // ================ forgot password ================
@@ -89,6 +95,7 @@ const LoginStyle = {
     padding: 0,
     height: 320
   }
+
 }
 
 export default LoginStyle

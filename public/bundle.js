@@ -30897,13 +30897,19 @@ var LoginStyle = {
 
   errorMessage: {
     fontSize: '14px',
-    color: '#ff1744',
+    color: '#FF8F00',
     fontWeight: 'bold'
   },
 
   forgotPWLink: {
     textDecoration: 'none',
     color: '#FFF !important'
+  },
+
+  afterInput: {
+    '&:after': {
+      backgroundColor: '#FF8F00'
+    }
   },
 
   // ================ forgot password ================
@@ -30947,6 +30953,7 @@ var LoginStyle = {
     padding: 0,
     height: 320
   }
+
 };
 
 exports.default = LoginStyle;
@@ -64388,14 +64395,14 @@ var LoginCardContainer = function (_Component) {
       });
     }, _this.validate = function (loginData, lang) {
       var errors = {};
-      if (!_validator2.default.isEmail(loginData.email)) lang === 'de' ? errors.email = 'Ungültige E-Mail' : errors.email = 'Invalid email';
+      if (!_validator2.default.isEmail(loginData.email)) lang === 'de' ? errors.email = 'Ungültige Email' : errors.email = 'Invalid email';
 
       if (!loginData.password) lang === 'de' ? errors.password = 'Das Passwort darf nicht leer sein' : errors.password = "Password can't be blank";
 
       _this.setState({ errors: errors });
       return errors;
     }, _this.checkErrors = function (errors, lang) {
-      if (errors.email) lang === 'de' ? errors.email = 'Ungültige E-Mail' : errors.email = 'Invalid email';
+      if (errors.email) lang === 'de' ? errors.email = 'Ungültige Email' : errors.email = 'Invalid email';
 
       if (errors.password) lang === 'de' ? errors.password = 'Das Passwort darf nicht leer sein' : errors.password = "Password can't be blank";
 
@@ -98620,7 +98627,8 @@ var LoginForm = function LoginForm(_ref) {
         value: loginData.email,
         className: classes.inputField,
         margin: 'normal',
-        InputProps: { style: { width: '100%' } },
+        InputLabelProps: { style: { color: !!errors.email ? '#FF8F00' : undefined } },
+        InputProps: { style: { width: '100%' }, className: classes.afterInput },
         onChange: onChange
       }),
       errors.email && _react2.default.createElement(
@@ -98637,7 +98645,8 @@ var LoginForm = function LoginForm(_ref) {
       value: loginData.password,
       className: classes.inputField,
       margin: 'normal',
-      InputProps: { style: { width: '100%' } },
+      InputLabelProps: { style: { color: !!errors.email ? '#FF8F00' : undefined } },
+      InputProps: { style: { width: '100%' }, className: classes.afterInput },
       onChange: onChange
     }),
     errors.password && _react2.default.createElement(
