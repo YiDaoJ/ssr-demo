@@ -11,8 +11,8 @@ class LoginCardContainer extends Component {
 
   state = {
     loginData: {
-      email: '',
-      password: ''
+      email: 'test@test.com',
+      password: '0000'
     },
     loading: false,
     errors: {}
@@ -50,12 +50,17 @@ class LoginCardContainer extends Component {
         errors
       },
       () => {
-        if (Object.keys(errors).length === 0) {
-          this.props
-            .submit(this.state.loginData)
-            .catch(err => this.setState({ errors: err.response.data.errors }))
+        try {
+          if (Object.keys(errors).length === 0) {
+            this.props.userLogin(this.state.loginData)
+          }
+        } catch (err) {
+          this.setState({ errors: err.response.data.errors })
         }
+
+          // .catch(err => this.setState({ errors: err.response.data.errors }))
       }
+
     )
   }
 

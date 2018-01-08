@@ -1,7 +1,7 @@
 import React from 'react';
 import LoginCardContainer from './containers/LoginCardContainer'
-const Login = props => {
+const LoginPage = props => {
   return <LoginCardContainer {...props} />;
 };
 
-export default Login;
+export default LoginPage;

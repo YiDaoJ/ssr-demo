@@ -4,6 +4,11 @@ import React from 'react'
 import bodyParser from 'body-parser'
 import { renderToString } from 'react-dom/server'
 import { StaticRouter } from 'react-router-dom'
+import { Provider } from 'react-redux';
+import {createStore, applyMiddleware} from 'redux';
+import thunk from 'redux-thunk';
+import serialize from 'serialize-javascript'
+
 
 import { SheetsRegistry } from 'react-jss/lib/jss';
 import JssProvider from 'react-jss/lib/JssProvider';
@@ -15,6 +20,7 @@ import { ServerStyleSheet, StyleSheetManager } from 'styled-components'
 import Helmet from 'react-helmet'
 import App from './App'
 import theme from './styles/theme'
+import rootReducer from './reducers/rootReducer';
 
 // const Html = ({ content, css }) => {
 
@@ -41,7 +47,7 @@ import theme from './styles/theme'
 // }
 
 
-const renderer = req => {
+const renderer = (req, store) => {
 
   const sheetsRegistry = new SheetsRegistry();
   const jss = create(preset());
@@ -54,9 +60,11 @@ const renderer = req => {
 
     <JssProvider registry={sheetsRegistry} jss={jss} generateClassName={generateClassName}>
       <MuiThemeProvider theme={theme} sheetsManager={new Map()}>
-        <StaticRouter location={req.url} context={context}>
-          <App />
-        </StaticRouter>
+        <Provider store={store}>
+          <StaticRouter location={req.url} context={context}>
+            <App />
+          </StaticRouter>
+        </Provider>
       </MuiThemeProvider>
     </JssProvider>
 
@@ -79,6 +87,7 @@ const renderer = req => {
       <body>
         <div id="root">${content}</div>
         <style id="jss-server-side">${css}</style>
+        <script>window.INITIAL_STATE = ${serialize(store.getState())}</script>
         <script src="bundle.js"></script>
       </body>
     </html>
@@ -92,7 +101,8 @@ app.use(bodyParser.json())
 app.use(express.static('public'))
 
 app.get('*', (req, res) => {
-  res.send(renderer(req))
+  const store = createStore(rootReducer, {}, applyMiddleware());
+  res.send(renderer(req, store))
 })
 
 app.listen(8000, console.log('Listening on port 8000'))

@@ -17,8 +17,10 @@ import rootReducer from './reducers/rootReducer'
 
 const store = createStore(
   rootReducer,
-  composeWithDevTools(applyMiddleware(thunk, logger))
+  window.INITIAL_STATE,
+  composeWithDevTools(applyMiddleware(logger))
 )
+
 
 
 ReactDOM.hydrate(

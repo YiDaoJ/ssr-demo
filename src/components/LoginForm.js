@@ -36,7 +36,7 @@ const LoginForm = ({ loginData, errors, onChange, lang, ...props }) => {
           error={!!errors.password}
           label={formatMessage(messages[lang].label)}
           type="password"
-          name={formatLabel.toLowerCase()}
+          name="password"
           value={loginData.password}
           className={classes.inputField}
           margin="normal"

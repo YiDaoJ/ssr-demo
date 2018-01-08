@@ -1,25 +1,30 @@
 import React, { Component } from 'react'
 import { func, shape } from 'prop-types'
 import { connect } from 'react-redux'
-import Login from '../Login'
-// import { userLoggedIn } from 'store/actions'
-// import api from '../api'
+import LoginPage from '../LoginPage'
+import { userLogin } from '../../actions/auth'
+
 
 class LoginPageContainer extends Component {
-  // submit = loginData =>
-  //   this.props.login(loginData).then(() => this.props.history.push('/'))
+  // submit = loginData => {this.props.login(loginData); console.log(loginData)}
+    // this.props.login(loginData).then(() => this.props.history.push('/'))
 
   render() {
-    return <Login {...this.props} />
+
+    return <LoginPage {...this.props}  />
   }
 }
 
-const mapStateToProps = state => ({})
+// const mapStateToProps = state => ({
+//   credentials: state.user.credentials
+// }) // null
 
 const mapDispatchToProps = dispatch => ({
+  userLogin: credentials => dispatch(userLogin(credentials))
   // login: credentials =>
   //   api.user.login(credentials).then(user => dispatch(userLoggedIn(user)))
 })
+
 
 LoginPageContainer.propTypes = {
   // history: shape({
@@ -28,6 +33,4 @@ LoginPageContainer.propTypes = {
   // login: func.isRequired
 }
 
-export default LoginPageContainer
-
-// export default connect(mapStateToProps, mapDispatchToProps)(LoginPageContainer)
+export default connect(null, mapDispatchToProps)(LoginPageContainer)
