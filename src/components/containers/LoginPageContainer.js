@@ -6,12 +6,14 @@ import { userLogin } from '../../actions/auth'
 
 
 class LoginPageContainer extends Component {
-  // submit = loginData => {this.props.login(loginData); console.log(loginData)}
-    // this.props.login(loginData).then(() => this.props.history.push('/'))
+
+  submit = loginData =>
+    this.props.userLogin(loginData).then(() => this.props.history.push("/"))
+  // submit = data => console.log(data)
 
   render() {
 
-    return <LoginPage {...this.props}  />
+    return <LoginPage {...this.props} submit={this.submit} />
   }
 }
 

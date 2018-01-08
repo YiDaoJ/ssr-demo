@@ -100,8 +100,12 @@ app.use(bodyParser.json())
 
 app.use(express.static('public'))
 
+app.post('/api/auth', (req, res) => {
+  res.status(400).json({ errors: { global: "Invalid credentials." } })
+})
+
 app.get('*', (req, res) => {
-  const store = createStore(rootReducer, {}, applyMiddleware());
+  const store = createStore(rootReducer, {}, applyMiddleware(thunk));
   res.send(renderer(req, store))
 })
 

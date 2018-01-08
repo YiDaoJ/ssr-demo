@@ -18,7 +18,7 @@ import rootReducer from './reducers/rootReducer'
 const store = createStore(
   rootReducer,
   window.INITIAL_STATE,
-  composeWithDevTools(applyMiddleware(logger))
+  composeWithDevTools(applyMiddleware(thunk, logger))
 )
 
 

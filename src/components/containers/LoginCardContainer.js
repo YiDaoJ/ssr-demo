@@ -5,8 +5,6 @@ import bcrypt from 'bcryptjs'
 import LoginCard from '../LoginCard'
 import { error } from 'util';
 
-// const LoginCardContainer = props => <LoginCard {...props} />
-
 class LoginCardContainer extends Component {
 
   state = {
@@ -50,15 +48,21 @@ class LoginCardContainer extends Component {
         errors
       },
       () => {
+
+        // if (Object.keys(errors).length === 0) {
+        //   this.props.submit(this.state.loginData)
+        //   .catch(err => this.setState({ errors: err.response.data.errors }))
+        // }
+
         try {
           if (Object.keys(errors).length === 0) {
+            // this.props.submit(this.state.loginData)
             this.props.userLogin(this.state.loginData)
           }
         } catch (err) {
           this.setState({ errors: err.response.data.errors })
         }
 
-          // .catch(err => this.setState({ errors: err.response.data.errors }))
       }
 
     )

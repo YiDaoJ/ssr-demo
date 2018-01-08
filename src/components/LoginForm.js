@@ -49,6 +49,7 @@ const LoginForm = ({ loginData, errors, onChange, lang, ...props }) => {
             {errors.password}
           </FormHelperText>
         )}
+        { errors.global && <FormHelperText className={classes.errorMessage}>{errors.global}</FormHelperText> }
       </form>
 
   )
