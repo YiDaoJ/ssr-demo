@@ -2,6 +2,7 @@ import path from 'path'
 import express from 'express'
 import React from 'react'
 import bodyParser from 'body-parser'
+import Promise from 'bluebird'
 import { renderToString, renderToStaticMarkup } from 'react-dom/server'
 import { StaticRouter } from 'react-router-dom'
 import { Provider } from 'react-redux';
@@ -24,6 +25,16 @@ import theme from './styles/theme'
 import rootReducer from './reducers/rootReducer';
 
 import auth from './api/routes/auth'
+import apiRouter from './api/apiRouter'
+import projects from './api/routes/projects';
+import languages from './api/routes/languages';
+import dataKeys from './api/routes/datakeys';
+import dataValues from './api/routes/datavalues';
+
+import dataKeyModel from './api/models/datakeys';
+import dataValueModel from './api/models/datavalues';
+import projectModel from './api/models/projects';
+import languageModel from './api/models/languages';
 
 const Html = ({ content, css, store }) => {
 
@@ -88,16 +99,17 @@ const renderer = (req, store) => {
 
 const app = express()
 app.use(bodyParser.json())
-
-mongoose.connect('mongodb://localhost/i18n_demo_user', { useMongoClient: true })
+mongoose.Promise = Promise
+mongoose.connect('mongodb://localhost/i18n_demo', { useMongoClient: true })
 
 app.use(express.static('public'))
 
 app.use('/api/auth', auth)
-
-// app.post('/api/auth', (req, res) => {
-//   res.status(400).json({ errors: { global: "Invalid credentials." } })
-// })
+app.use('/api', apiRouter)
+app.use('/api/projects', projects);
+app.use('/api/languages', languages);
+app.use('/api/datakeys', dataKeys);
+app.use('/api/datavalues', dataValues);
 
 app.get('*', (req, res) => {
   const store = createStore(rootReducer, {}, applyMiddleware(thunk));
@@ -105,5 +117,24 @@ app.get('*', (req, res) => {
   res.status(200)
   res.send(renderer(req, store))
 })
+
+// const lang = new languageModel({ _id: 'en', name: 'English'});
+
+// lang.save(err => {
+//   if(err)
+//     console.log(err);
+
+//   const datakeyItem = new dataKeyModel({ _id: 'GLOBAL__BTN_SAVE' });
+//   datakeyItem.save(err => { if(err) console.log(err);});
+
+//   const datavalueItem = new dataValueModel({ value: 'Save', key: datakeyItem._id, language: lang._id, project: ''});
+//   datavalueItem.save(err => { if(err) console.log(err);});
+
+//   const proj = new projectModel({ _id: 'TestProject', languages: [lang._id], data:{ datakeys: [datakeyItem._id], datavalues: [datavalueItem._id] } });
+//   proj.save(err => {
+//     if(err)
+//       console.log(err);
+//   });
+// });
 
 app.listen(3000, console.log('Listening on port 3000'))
