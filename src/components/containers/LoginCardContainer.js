@@ -35,33 +35,33 @@ class LoginCardContainer extends Component {
 
   onSubmit = () => {
     const errors = this.validate(this.state.loginData, this.props.lang)
-    const passwordHash =
-      this.state.loginData.password &&
-      bcrypt.hashSync(this.state.loginData.password, 10)
+    // const salt = bcrypt.genSaltSync(10)
+    // const passwordHash =
+    //   this.state.loginData.password &&
+    //   bcrypt.hashSync(this.state.loginData.password, salt)
 
-    this.setState(
-      {
-        loginData: {
-          ...this.state.loginData,
-          password: passwordHash
-        },
-        errors
-      },
+    //   console.log(bcrypt.compareSync('0000', passwordHash))
+
+
+    this.setState({ errors },
+
       () => {
 
-        // if (Object.keys(errors).length === 0) {
-        //   this.props.submit(this.state.loginData)
-        //   .catch(err => this.setState({ errors: err.response.data.errors }))
-        // }
-
-        try {
-          if (Object.keys(errors).length === 0) {
-            // this.props.submit(this.state.loginData)
-            this.props.userLogin(this.state.loginData)
-          }
-        } catch (err) {
-          this.setState({ errors: err.response.data.errors })
+        if (Object.keys(errors).length === 0) {
+          this.props.submit(this.state.loginData)
+          .catch(err =>
+            this.setState({ errors: err.response.data.errors })
+          )
         }
+
+        // try {
+        //   if (Object.keys(errors).length === 0) {
+        //     // this.props.submit(this.state.loginData)
+        //     this.props.userLogin(this.state.loginData)
+        //   }
+        // } catch (err) {
+        //   this.setState({ errors: err.response.data.errors })
+        // }
 
       }
 

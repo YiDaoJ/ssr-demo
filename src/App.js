@@ -8,6 +8,7 @@ import de from "react-intl/locale-data/de"
 import Header from './components/Header'
 import Home from './components/Home'
 import About from './components/About'
+import Dashboard from './components/Dashboard'
 import LoginPageContainer from './components/containers/LoginPageContainer'
 import messages from './messages'
 
@@ -44,19 +45,22 @@ class App extends Component {
           <Helmet>
             <title>React SSR</title>
             <meta name="description" content="Meine Beschreibung"/>
-            <link rel="icon" href={`http://localhost:8000/favicon.ico`} />
+            <link rel="icon" href={`http://localhost:3000/favicon.ico`} />
           </Helmet>
           <Header changeLanguage={this.changeLanguage} />
           <div
             style={{
               backgroundColor: '#FAFAFA',
-              height: '100%',
-              width: '100%',
+              height: '100vh',
+              width: '90%',
               display: 'flex',
-              paddingTop: 60 }}>
+              paddingTop: 60,
+              margin: '0 auto' }}>
             <Switch>
               <Route component={Home} path="/" exact />
               <Route component={About} path="/about" />
+              <Route component={Dashboard} path="/dashboard" />
+              {/* <Route component={LoginPageContainer} path="/login" /> */}
               <Route render={() => <LoginPageContainer lang={lang} />} path="/login" />
             </Switch>
           </div>

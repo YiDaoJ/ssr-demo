@@ -2,17 +2,17 @@ import React, { Component } from 'react'
 import { func, shape } from 'prop-types'
 import { connect } from 'react-redux'
 import LoginPage from '../LoginPage'
+import LoginCardContainer from '../containers/LoginCardContainer'
 import { userLogin } from '../../actions/auth'
 
 
 class LoginPageContainer extends Component {
 
   submit = loginData =>
-    this.props.userLogin(loginData).then(() => this.props.history.push("/"))
+    this.props.userLogin(loginData).then(() => this.props.history.push("/dashboard"))
   // submit = data => console.log(data)
 
   render() {
-
     return <LoginPage {...this.props} submit={this.submit} />
   }
 }

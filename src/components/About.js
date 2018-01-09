@@ -1,9 +1,10 @@
 import React from 'react';
+import Typography from 'material-ui/Typography';
 
 const About = () => {
   return (
     <div>
-      <h2>About Page</h2>
+      <Typography type="display3" gutterBottom>About Page</Typography>
     </div>
   );
 };

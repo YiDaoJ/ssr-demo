@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
 import { Provider } from 'react-redux'
@@ -15,6 +15,21 @@ import rootReducer from './reducers/rootReducer'
 //   console.log(localStorage.i18nLang)
 // }
 
+class Main extends Component {
+  componentDidMount() {
+    const jssStyles = document.getElementById('jss-server-side');
+    if (jssStyles && jssStyles.parentNode) {
+      jssStyles.parentNode.removeChild(jssStyles);
+    }
+  }
+
+  render() {
+    return <App {...this.props} />
+  }
+
+}
+
+
 const store = createStore(
   rootReducer,
   window.INITIAL_STATE,
@@ -22,13 +37,22 @@ const store = createStore(
 )
 
 
+const ROOT = document.getElementById('root')
 
-ReactDOM.hydrate(
-  <MuiThemeProvider theme={theme} >
+// const renderMethod = !ROOT.innerHTML.trim().length ? ReactDOM.render : ReactDOM.hydrate;
+// renderMethod(
+  ReactDOM.hydrate(
+    <MuiThemeProvider theme={theme} >
     <Provider store={store}>
       <BrowserRouter>
         <App />
       </BrowserRouter>
     </Provider>
   </MuiThemeProvider>,
-  document.getElementById('root'))
+  document.getElementById('root')
+)
+
+// )
+
+
+
