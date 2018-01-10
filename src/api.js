@@ -6,7 +6,7 @@ export default {
       axios.post("/api/auth", { credentials }).then(res => res.data.user)
   },
   project: {
-    getProjects: projects =>
+    get: projects =>
       axios.get("/api/projects", {projects}).then(res => res.data.projects )
 
   }

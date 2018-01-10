@@ -1,18 +1,18 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { getAllProjects } from '../actions/project'
+import { fetchData } from '../actions/project'
 
 
 class Dashboard extends Component {
 
   componentDidMount() {
-    // this.props.getAllProjects()
-    console.log(this.props.getAllProjects())
+    this.props.getAllProjects()
+    // console.log(this.props.getAllProjects())
   }
 
 
   render() {
-    console.log(this.props.allProjects)
+    console.log(this.props.allProjects )
     const { allProjects } = this.props
 
     return (
@@ -28,7 +28,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  getAllProjects: () => dispatch(getAllProjects())
+  getAllProjects: () => dispatch(fetchData())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

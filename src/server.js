@@ -1,3 +1,4 @@
+import 'babel-polyfill';
 import path from 'path'
 import express from 'express'
 import React from 'react'
@@ -7,10 +8,11 @@ import { renderToString, renderToStaticMarkup } from 'react-dom/server'
 import { StaticRouter } from 'react-router-dom'
 import { Provider } from 'react-redux';
 import {createStore, applyMiddleware} from 'redux';
-import thunk from 'redux-thunk';
+// import thunk from 'redux-thunk';
+import createSagaMiddleware from 'redux-saga'
 import serialize from 'serialize-javascript'
 import mongoose from 'mongoose'
-
+import Helmet from 'react-helmet'
 
 import { SheetsRegistry } from 'react-jss/lib/jss';
 import JssProvider from 'react-jss/lib/JssProvider';
@@ -18,11 +20,11 @@ import { create } from 'jss';
 import preset from 'jss-preset-default';
 import { MuiThemeProvider, createGenerateClassName } from 'material-ui/styles';
 
-import { ServerStyleSheet, StyleSheetManager } from 'styled-components'
-import Helmet from 'react-helmet'
+
 import App from './App'
 import theme from './styles/theme'
 import rootReducer from './reducers/rootReducer';
+import { helloSaga } from './sagas'
 
 import auth from './api/routes/auth'
 import apiRouter from './api/apiRouter'
@@ -31,10 +33,12 @@ import languages from './api/routes/languages';
 import dataKeys from './api/routes/datakeys';
 import dataValues from './api/routes/datavalues';
 
-import dataKeyModel from './api/models/datakeys';
-import dataValueModel from './api/models/datavalues';
-import projectModel from './api/models/projects';
-import languageModel from './api/models/languages';
+// import dataKeyModel from './api/models/datakeys';
+// import dataValueModel from './api/models/datavalues';
+// import projectModel from './api/models/projects';
+// import languageModel from './api/models/languages';
+
+const sagaMiddleware = createSagaMiddleware()
 
 const Html = ({ content, css, store }) => {
 
@@ -90,8 +94,6 @@ const renderer = (req, store) => {
 
   const css = sheetsRegistry.toString()
 
-  // console.log(content)
-
   return `<!doctype html>\n${renderToString(Html({content, css, store}))}`
 
 }
@@ -112,11 +114,17 @@ app.use('/api/datakeys', dataKeys);
 app.use('/api/datavalues', dataValues);
 
 app.get('*', (req, res) => {
-  const store = createStore(rootReducer, {}, applyMiddleware(thunk));
+  const store = createStore(rootReducer, {}, applyMiddleware(sagaMiddleware));
+  // sagaMiddleware.run(helloSaga)
 
   res.status(200)
+
   res.send(renderer(req, store))
 })
+
+
+
+app.listen(3000, console.log('Listening on port 3000'))
 
 // const lang = new languageModel({ _id: 'en', name: 'English'});
 
@@ -137,4 +145,4 @@ app.get('*', (req, res) => {
 //   });
 // });
 
-app.listen(3000, console.log('Listening on port 3000'))
+// "dev:start-server": "nodemon --watch build --exec \"node --inspect-brk build/bundle.js\"",
