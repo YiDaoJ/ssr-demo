@@ -10,7 +10,7 @@ const Schema = mongoose.Schema;
 // });
 
 const dataValuesSchema = new Schema({
-  value: String,  
+  value: String,
   key: { type: String, ref: 'datakeys' },
   language: { type: String, ref: 'languages' },
   project: { type: String, ref: 'projects' }

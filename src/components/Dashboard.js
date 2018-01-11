@@ -1,34 +1,26 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { fetchData } from '../actions/project'
+import React from 'react';
+import Button from 'material-ui/Button'
 
+const Dashboard = ({onCreateProjectClick, ...props}) => {
 
-class Dashboard extends Component {
+  const { allProjects } = props
+  // console.log(allProjects)
+  console.log(JSON.stringify(allProjects, undefined, 2))
 
-  componentDidMount() {
-    this.props.getAllProjects()
-    // console.log(this.props.getAllProjects())
-  }
-
-
-  render() {
-    console.log(this.props.allProjects )
-    const { allProjects } = this.props
-
-    return (
-      <div>
-        <h2>Dashborad - Test Page</h2>
+  return (
+    <div style={{width: "100%", height: "100%", overflow:"scroll" }}>
+      <div style={{backgroundColor: "#F5F5F5", width: "100%", height: "auto", overflow:"scroll", marginBottom: 30, padding: 15 }}>
+        { allProjects && allProjects.map((proj, i) => <li key={i}>{proj['_id']}</li>) }
+        <div style={{ width: "100%", margin: "10px auto" }}>
+          { JSON.stringify(allProjects, null, "\t") }
+        </div>
       </div>
-    );
-  }
-}
+      <div className="btnGroup">
+        <Button raised color="primary" onClick={onCreateProjectClick}> Add new Project</Button>
+      </div>
 
-const mapStateToProps = state => ({
-  allProjects: state.project.projects
-})
+    </div>
+  );
+};
 
-const mapDispatchToProps = dispatch => ({
-  getAllProjects: () => dispatch(fetchData())
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
+export default Dashboard;

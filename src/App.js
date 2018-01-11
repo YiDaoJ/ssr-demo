@@ -8,7 +8,7 @@ import de from "react-intl/locale-data/de"
 import Header from './components/Header'
 import Home from './components/Home'
 import About from './components/About'
-import Dashboard from './components/Dashboard'
+import DashboardContainer from './components/containers/DashboardContainer'
 import LoginPageContainer from './components/containers/LoginPageContainer'
 import messages from './messages'
 
@@ -59,7 +59,7 @@ class App extends Component {
             <Switch>
               <Route component={Home} path="/" exact />
               <Route component={About} path="/about" />
-              <Route component={Dashboard} path="/dashboard" />
+              <Route component={DashboardContainer} path="/dashboard" />
               {/* <Route component={LoginPageContainer} path="/login" /> */}
               <Route render={() => <LoginPageContainer lang={lang} />} path="/login" />
             </Switch>

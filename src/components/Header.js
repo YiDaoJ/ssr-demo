@@ -54,6 +54,12 @@ const Header = ({ changeLanguage, ...props }) => {
             <FormattedMessage id="nav.about" defaultMessage="About" />
             </Link>
           </Button>
+          <Button>
+            <Link to="/dashboard" className={classes.link}>
+            Dashboard
+            {/* <FormattedMessage id="nav.dashboard" defaultMessage="Dashboard" /> */}
+            </Link>
+          </Button>
 
           <div className={classes.changeLang}>
             <a role="button" name="en" onClick={event => changeLanguage(event)} className={classes.changeLangBtn}>EN</a>
