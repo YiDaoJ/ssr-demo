@@ -4,14 +4,30 @@ import projectsModel from '../models/projects';
 const router = express.Router();
 
 router.get('/', (req, res) => {
+
+  const formatProjects = []
+
   projectsModel
     .find()
-    .populate('languages', 'name')
-    .populate('data.datavalues', ['value', 'key'])
-    // .then(projects => res.json({projects}));
-    //{"projects":[{"_id":"TestProject","data":{"datavalues":["5a54d46b6534d01b4b00247f"],"datakeys":["GLOBAL__BTN_SAVE"]},"languages":["en"]}]}
-    .then(projects => res.send(projects))
-    // [{"_id":"TestProject","data":{"datavalues":["5a54d46b6534d01b4b00247f"],"datakeys":["GLOBAL__BTN_SAVE"]},"languages":["en"]}]
+    .populate('languages', '_id')
+    .populate('data.datavalues', ['value', 'key', 'language', 'project'])
+    .exec((err, data) => {
+      if (err) return
+      console.log(err);
+
+      data.forEach(proj => {
+
+        const formatProject = {}
+        const projectData = proj.data
+
+        formatProject._id = proj._id;
+        formatProject.data=projectData.datavalues;
+        formatProject.languages = proj.languages;
+
+        formatProjects.push(formatProject)
+      })
+      res.json(formatProjects)
+    })
 });
 
 router.post('/', (req, res) => {
@@ -25,6 +41,7 @@ router.post('/', (req, res) => {
 router.get('/:title', (req, res) => {
   projectsModel
     .findOne({ _id: req.params.title })
+    .populate('languages', '_id')
     .then(project => res.json({project}));
 });
 
@@ -70,3 +87,14 @@ router.get('/:title/datavalues', (req, res) => {
 });
 
 export default router;
+
+
+// .populate({ path: 'data.datavalues', select: 'value' })
+// .populate('data.datavalues', ['value', 'key', 'language'])
+// .then(projects => res.json({projects}));
+//{"projects":[{"_id":"TestProject","data":{"datavalues":["5a54d46b6534d01b4b00247f"],"datakeys":["GLOBAL__BTN_SAVE"]},"languages":["en"]}]}
+// .then(projects => res.format({
+//   json: function(){
+//     res.send({ message: 'hey' });
+//   }
+// }))

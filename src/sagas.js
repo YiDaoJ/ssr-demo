@@ -21,7 +21,7 @@ function* createProjectRequest(project) {
   console.log('test from saga - createProjectRequest')
   try {
     const proj = yield call(api.project.post, project)
-    debugger
+    // debugger
     yield put(projectActions.createProjectSucceeded(proj.project))
   } catch (error) {
     yield put(projectActions.createProjectFailed(error))
