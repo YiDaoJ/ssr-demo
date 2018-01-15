@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from 'material-ui/Button'
 
-const Dashboard = ({onCreateProjectClick, ...props}) => {
+const Dashboard = ({onCreateProjectClick, onDeleteProjectClick, ...props}) => {
 
   const { allProjects } = props
   // console.log(allProjects)
@@ -22,7 +22,8 @@ const Dashboard = ({onCreateProjectClick, ...props}) => {
         </pre>
       </div>
       <div className="btnGroup">
-        <Button raised color="primary" onClick={onCreateProjectClick}> Add new Project</Button>
+        <Button raised color="primary" onClick={onCreateProjectClick}> Add new Project</Button> {'\t'}
+        <Button raised color="inherit" onClick={onDeleteProjectClick}> Delete Project</Button>
       </div>
     </div>
   );

@@ -1,11 +1,14 @@
 import express from 'express';
 import projectsModel from '../models/projects';
+import project from '../../reducers/project';
 
 const router = express.Router();
 
+// read
 router.get('/', (req, res) => {
 
   const formatProjects = []
+
 
   projectsModel
     .find()
@@ -30,11 +33,24 @@ router.get('/', (req, res) => {
     })
 });
 
+
+// create
 router.post('/', (req, res) => {
   console.log('req from project router: ', req.body)
   console.log('req from project router: ', req.body.project._id)
   projectsModel.create({_id: req.body.project._id})
-    .then(project => res.json({project}))
+    .then(project => res.json(project))
+    .catch(err => res.status(400).json({ err }));
+})
+
+// remove / delete
+router.delete('/', (req, res) => {
+
+  projectsModel
+    .find({_id: req.query._id})
+    // .remove({_id: req.query._id})
+    // .deleteOne({_id: req.query._id})
+    .then(project=> res.json(project))
     .catch(err => res.status(400).json({ errors: parseErrors(err.errors) }));
 })
 

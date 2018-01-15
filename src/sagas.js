@@ -1,6 +1,9 @@
 import { put, call, takeEvery } from 'redux-saga/effects'
 import * as projectActions from './actions/project'
 import api from './api'
+import project from './reducers/project';
+
+// ============ read ==============
 
 function* fetchData() {
   try {
@@ -17,24 +20,48 @@ function* watchFetchData() {
   )
 }
 
+// ============ create ==============
+
 function* createProjectRequest(project) {
-  console.log('test from saga - createProjectRequest')
   try {
     const proj = yield call(api.project.post, project)
-    // debugger
-    yield put(projectActions.createProjectSucceeded(proj.project))
+    yield put(projectActions.createProjectSucceeded(proj))
   } catch (error) {
     yield put(projectActions.createProjectFailed(error))
   }
 }
 
 function* watchCreateProjectRequest(project) {
-  console.log('test from saga - watchCreateProjectRequest')
+  console.log('test from watchCreateProjectRequest:', project)
   yield call(
     createProjectRequest,
     project
   )
 }
+
+// ============ delete ==============
+
+function* deleteProjectRequestAsync(project) {
+
+  try {
+    console.log('test from saga: project: ', project)
+    const proj = yield call(api.project.delete, project)
+    console.log('test from saga: ', proj)
+    yield put(projectActions.deleteProjectSucceeded(proj[0]))
+  } catch (error) {
+    yield put(projectActions.deleteProjectFailed(error))
+  }
+}
+
+function* watchDeleteProjectRequest(data) {
+  console.log('test from watchDeleteProjectRequest:', data)
+  yield call(
+    deleteProjectRequestAsync,
+    data
+  )
+}
+
+// ============ rootSaga ==============
 
 export default function*() {
   yield takeEvery(
@@ -45,5 +72,10 @@ export default function*() {
   yield takeEvery(
     projectActions.CREATE_PROJECT_REQUEST,
     watchCreateProjectRequest
+  )
+
+  yield takeEvery(
+    projectActions.DELETE_PROJECT_REQUEST,
+    watchDeleteProjectRequest
   )
 }

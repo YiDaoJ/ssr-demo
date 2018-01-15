@@ -2,6 +2,7 @@ import api from '../api'
 
 export const FETCH_DATA = 'FETCH_DATA'
 export const CREATE_PROJECT_REQUEST = 'CREATE_PROJECT_REQUEST'
+export const DELETE_PROJECT_REQUEST = 'DELETE_PROJECT_REQUEST'
 
 // ============== fetchData =================
 
@@ -34,6 +35,23 @@ export const createProjectSucceeded = project => ({
 
 export const createProjectFailed = error => ({
   type: 'CREATE_PROJECT_FAILED',
+  error
+})
+
+// =============== delete Project ================
+
+export const deleteProjectRequest = project => ({
+  type: DELETE_PROJECT_REQUEST,
+  project
+})
+
+export const deleteProjectSucceeded = project => ({
+  type: 'DELETE_PROJECT_SUCCEEDED',
+  project
+})
+
+export const deleteProjectFailed = error => ({
+  type: 'DELETE_PROJECT_FAILED',
   error
 })
 

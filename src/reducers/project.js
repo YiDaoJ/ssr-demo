@@ -14,7 +14,6 @@ export default (state={projects: []}, action) =>  {
       }
 
     case 'CREATE_PROJECT_REQUEST':
-      console.log('test from reducer', state, action.project)
       return state
 
     case 'CREATE_PROJECT_SUCCEEDED':
@@ -23,6 +22,21 @@ export default (state={projects: []}, action) =>  {
         projects: [
           ...state.projects,
           action.project
+        ]
+      }
+
+    case 'DELETE_PROJECT_REQUEST':
+      // return {...state, project: action.project}
+      return state
+
+    case 'DELETE_PROJECT_SUCCEEDED':
+      console.log('reducer: ',  state.projects)
+      console.log('reducer: ',  action.project)
+      const index = state.projects.findIndex(action.project)
+      return {
+        ...state,
+        projects: [
+          ...state.projects.slice(0, index), ...state.projects.slice(index + 1)
         ]
       }
 
