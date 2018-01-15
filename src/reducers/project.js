@@ -30,9 +30,8 @@ export default (state={projects: []}, action) =>  {
       return state
 
     case 'DELETE_PROJECT_SUCCEEDED':
-      console.log('reducer: ',  state.projects)
-      console.log('reducer: ',  action.project)
-      const index = state.projects.findIndex(action.project)
+      const index = state.projects.findIndex(project => project._id === action.project._id)
+      // console.log(index)
       return {
         ...state,
         projects: [

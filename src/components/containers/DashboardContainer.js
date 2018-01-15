@@ -18,7 +18,7 @@ class DashboardContainer extends Component {
 
   onDeleteProjectClick = () => {
     const { deleteProject } = this.props
-    const project = 'HennesProject2'
+    const project = {_id: 'HennesProject2'}
     deleteProject(project)
   }
 

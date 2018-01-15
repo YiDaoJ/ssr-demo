@@ -42,19 +42,15 @@ function* watchCreateProjectRequest(project) {
 // ============ delete ==============
 
 function* deleteProjectRequestAsync(project) {
-
   try {
-    console.log('test from saga: project: ', project)
     const proj = yield call(api.project.delete, project)
-    console.log('test from saga: ', proj)
-    yield put(projectActions.deleteProjectSucceeded(proj[0]))
+    yield put(projectActions.deleteProjectSucceeded(proj))
   } catch (error) {
     yield put(projectActions.deleteProjectFailed(error))
   }
 }
 
 function* watchDeleteProjectRequest(data) {
-  console.log('test from watchDeleteProjectRequest:', data)
   yield call(
     deleteProjectRequestAsync,
     data
