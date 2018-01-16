@@ -116,9 +116,7 @@ app.use('/api/datavalues', dataValues);
 app.get('*', (req, res) => {
   const store = createStore(rootReducer, {}, applyMiddleware(sagaMiddleware));
   // sagaMiddleware.run(helloSaga)
-
   res.status(200)
-
   res.send(renderer(req, store))
 })
 

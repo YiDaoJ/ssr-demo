@@ -19,4 +19,12 @@ const projectSchema = new Schema({
   }
 });
 
+// projectSchema.methods.updateProject = function updateProject(project, payload) {
+//   console.log('test from models: ', project, payload)
+//   return {
+//     ...project,
+//     payload
+//   }
+// }
+
 export default mongoose.model('projects', projectSchema);

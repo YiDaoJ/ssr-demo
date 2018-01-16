@@ -1,13 +1,26 @@
 import express from 'express';
 import projectsModel from '../models/projects';
-import project from '../../reducers/project';
 
-const router = express.Router();
+const router = express.Router()
+
+const formatProject = data => {
+  const formatedProjects = []
+  data.forEach(proj => {
+
+    const formatProject = {}
+    const projectData = proj.data
+
+    formatProject._id = proj._id;
+    formatProject.data = projectData.datavalues;
+    formatProject.languages = proj.languages;
+
+    formatedProjects.push(formatProject)
+  })
+  return formatedProjects
+}
 
 // read
 router.get('/', (req, res) => {
-
-  const formatProjects = []
 
   projectsModel
     .find()
@@ -17,18 +30,20 @@ router.get('/', (req, res) => {
       if (err) return
       console.log(err);
 
-      data.forEach(proj => {
+      // data.forEach(proj => {
 
-        const formatProject = {}
-        const projectData = proj.data
+      //   const formatProject = {}
+      //   const projectData = proj.data
 
-        formatProject._id = proj._id;
-        formatProject.data=projectData.datavalues;
-        formatProject.languages = proj.languages;
+      //   formatProject._id = proj._id;
+      //   formatProject.data = projectData.datavalues;
+      //   formatProject.languages = proj.languages;
 
-        formatProjects.push(formatProject)
-      })
-      res.json(formatProjects)
+      //   formatedProjects.push(formatProject)
+      // })
+
+      const formatedProjects = formatProject(data)
+      res.json(formatedProjects)
     })
 });
 
@@ -44,6 +59,24 @@ router.post('/', (req, res) => {
 router.delete('/', (req, res) => {
   projectsModel
     .findOneAndRemove({_id: req.query._id})
+    .then(project=> res.json(project))
+    .catch(err => res.status(400).json(err));
+})
+
+// update
+router.put('/', (req, res) => {
+  // console.log('test from route: ', req.body)
+
+  projectsModel
+    .findOneAndUpdate({_id: req.body._id}, { $set: {  }}, {new: true})
+    // .findByIdAndUpdate(req.query._id, projectsModel.updateProject, {new: true})
+    // .exec((err, project) => {
+    //   if (err) return
+    //   console.log(err);
+
+    //   // console.log(project)
+    //   res.json(project)
+    // })
     .then(project=> res.json(project))
     .catch(err => res.status(400).json(err));
 })
