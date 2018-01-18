@@ -1,5 +1,3 @@
-import api from '../api'
-
 export const FETCH_DATA = 'FETCH_DATA'
 export const CREATE_PROJECT_REQUEST = 'CREATE_PROJECT_REQUEST'
 export const DELETE_PROJECT_REQUEST = 'DELETE_PROJECT_REQUEST'

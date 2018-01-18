@@ -1,5 +1,6 @@
 import { put, call, takeEvery } from 'redux-saga/effects'
 import * as projectActions from './actions/project'
+import * as auth from './actions/auth'
 import api from './api'
 
 
@@ -72,7 +73,6 @@ function* updateProjectRequest(data) {
 }
 
 function* watchUpdateProjectRequest(data) {
-  console.log('test from watchUpdateProjectRequest:', data)
   yield call(
     updateProjectRequest,
     data
@@ -80,7 +80,24 @@ function* watchUpdateProjectRequest(data) {
 }
 
 // ============= user login ================
+function* userLogin(data) {
+  try {
+    const credentials = yield call(api.user.login, data)
+    console.log('test from saga - credentials: ', credentials)
+    yield put(auth.userLoginSuccess(credentials))
+  } catch (error) {
+    const errors = error && error.response && error.response.data && error.response.data.errors || []
+    yield put(auth.userLoginFailure(errors))
+    // yield put(error.throw(errors))
+  }
+}
 
+function* watchUserLogin(data) {
+  yield call(
+    userLogin,
+    data
+  )
+}
 
 
 // ============ rootSaga ==============
@@ -104,5 +121,10 @@ export default function*() {
   yield takeEvery(
     projectActions.UPDATE_PROJECT_REQUEST,
     watchUpdateProjectRequest
+  )
+
+  yield takeEvery(
+    auth.USER_LOGIN,
+    watchUserLogin
   )
 }
