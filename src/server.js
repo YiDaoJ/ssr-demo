@@ -98,9 +98,12 @@ const renderer = (req, store) => {
 
 }
 
+process.env.BLUEBIRD_DEBUG = 1
+
 
 const app = express()
 app.use(bodyParser.json())
+mongoose.set('debug', true)
 mongoose.Promise = Promise
 mongoose.connect('mongodb://localhost/i18n_demo', { useMongoClient: true })
 

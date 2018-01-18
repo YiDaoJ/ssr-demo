@@ -1,6 +1,11 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { fetchData, createProjectRequest, deleteProjectRequest, updateProjectRequest } from '../../actions/project'
+import {
+  fetchData,
+  createProjectRequest,
+  deleteProjectRequest,
+  updateProjectRequest
+} from '../../actions/project'
 import Dashboard from '../Dashboard'
 
 
@@ -25,15 +30,13 @@ class DashboardContainer extends Component {
   onUpdateProjectClick = () => {
     const { updateProject, allProjects } = this.props
     updateProject(allProjects[1], {
-
-      data: [
+      data:
         {
-            "value": "Save",
+            "value": "Speichern",
             "key": "GLOBAL__BTN_SAVE",
-            "language": "en",
+            "language": "de",
             "project": allProjects[1]._id
         }
-      ]
 
       // data: {
       //   datavalues: [
@@ -52,8 +55,7 @@ class DashboardContainer extends Component {
 
 
   render() {
-    // const { allProjects } = this.props
-    // console.log(allProjects)
+
     return (
       <div>
         <h2>Dashborad - Test Page</h2>

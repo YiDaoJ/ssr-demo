@@ -1,22 +1,27 @@
 import express from 'express';
 import projectsModel from '../models/projects';
+import keyModel from '../models/datakeys'
+import valueModel from '../models/datavalues'
 
 const router = express.Router()
 
 const formatProject = data => {
-  const formatedProjects = []
-  data.forEach(proj => {
+  const format = proj => {
 
     const formatProject = {}
-    const projectData = proj.data
 
     formatProject._id = proj._id;
-    formatProject.data = projectData.datavalues;
+    formatProject.data = proj.datavalues;
     formatProject.languages = proj.languages;
 
-    formatedProjects.push(formatProject)
-  })
-  return formatedProjects
+    return formatProject
+  }
+
+  if(Array.isArray(data)) {
+    return data.map(format)
+  }
+
+  return format(data)
 }
 
 // read
@@ -25,7 +30,7 @@ router.get('/', (req, res) => {
   projectsModel
     .find()
     .populate('languages', '_id')
-    .populate('data.datavalues', ['value', 'key', 'language', 'project'])
+    .populate('datavalues', ['value', 'key', 'language'])
     .exec((err, data) => {
       if (err) return
       console.log(err);
@@ -66,19 +71,101 @@ router.delete('/', (req, res) => {
 // update
 router.put('/', (req, res) => {
   // console.log('test from route: ', req.body)
+  const { _id, languages, ...data } = req.body
 
   projectsModel
-    .findOneAndUpdate({_id: req.body._id}, { $set: {  }}, {new: true})
-    // .findByIdAndUpdate(req.query._id, projectsModel.updateProject, {new: true})
-    // .exec((err, project) => {
-    //   if (err) return
-    //   console.log(err);
+  .findById(_id)
+  .populate('datakeys')
+  .populate('datavalues', ['value', 'language', 'key'])
+  .exec((err, project) => {
+    if (err) {
+      res.status(400).json(err)
+      return
+    }
 
-    //   // console.log(project)
-    //   res.json(project)
-    // })
-    .then(project=> res.json(project))
-    .catch(err => res.status(400).json(err));
+    let keyIsSaved = false
+    let valueIsSaved = false
+
+    for(let i = 0; i  < project.datakeys.length; i++) {
+      if(project.datakeys[i].value === data.key) {
+        keyIsSaved = true
+        break
+      }
+    }
+
+    /* =============== datakey =============  */
+
+    if(!keyIsSaved) {
+      const key = new keyModel({ value: data.key })
+      project.datakeys.push(key)
+      key.save()
+    } else {
+      const keyIndex = project.datakeys.findIndex(key => key.value === data.key)
+      console.log(project.datakeys[keyIndex])
+      project.datakeys[keyIndex].update({
+        value: data.value
+      })
+    }
+
+    for(let i = 0; i < project.datavalues.length; i++) {
+      if(project.datavalues[i].key === data.key) {
+        valueIsSaved = true
+        break
+      }
+    }
+
+    /* =============== datavalue =============  */
+
+    if(!valueIsSaved) {
+      const value = new valueModel({
+        value: data.value,
+        language: data.language,
+        project: data.project,
+        key: data.key
+      })
+
+      project.datavalues.push(value)
+
+      value.save()
+      project.save()
+      res.json(formatProject(project))
+    } else {
+      const currentValue = project.datavalues.find(key => key.key === data.key)
+
+      const newData = {
+        value: data.value,
+        language: data.language,
+        project: data.project,
+        key: data.key
+      }
+
+      if(currentValue) {
+        valueModel.findOneAndUpdate({ _id: currentValue._id },{ $set: newData } , {new: true}, () => {
+          const index = project.datavalues.findIndex(key => key.key === data.key)
+          project.datavalues[index] = {
+            _id: currentValue._id,
+            ...newData
+          }
+          project.save()
+          res.json(formatProject(project))
+        })
+      }
+
+    }
+  })
+
+  // projectsModel
+  //   .findOneAndUpdate({_id: req.body._id}, { $set: data }, {new: true})
+  //   // .findByIdAndUpdate(req.query._id, projectsModel.updateProject, {new: true})
+  //   // .exec((err, project) => {
+  //   //   if (err) return
+  //   //   console.log(err);
+
+  //   //   // console.log(project)
+  //   //   res.json(project)
+  //   // })
+  //   .then(project=> res.json(project))
+  //   .catch(err => res.status(400).json(err));
 })
 
 router.get('/:title', (req, res) => {

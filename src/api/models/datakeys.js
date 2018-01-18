@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 const dataKeysSchema = new Schema({
-  _id: { type: String },
+  value: { type: String }
 });
 
 // languagesSchema.set('autoIndex', false);
