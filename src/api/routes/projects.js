@@ -2,15 +2,18 @@ import express from 'express';
 import projectsModel from '../models/projects';
 import keyModel from '../models/datakeys'
 import valueModel from '../models/datavalues'
+import languageModel from '../models/languages'
 
 const router = express.Router()
 
 const formatProject = data => {
+
   const format = proj => {
 
     const formatProject = {}
 
     formatProject._id = proj._id;
+    // formatProject.key = proj.datakeys;
     formatProject.data = proj.datavalues;
     formatProject.languages = proj.languages;
 
@@ -70,7 +73,7 @@ router.delete('/', (req, res) => {
 
 // update
 router.put('/', (req, res) => {
-  // console.log('test from route: ', req.body)
+
   const { _id, languages, ...data } = req.body
 
   projectsModel
@@ -85,7 +88,12 @@ router.put('/', (req, res) => {
 
     let keyIsSaved = false
     let valueIsSaved = false
+    let languageIsSaved = false
 
+
+    /* =============== datakey =============  */
+
+    // check if datakey is in Project saved
     for(let i = 0; i  < project.datakeys.length; i++) {
       if(project.datakeys[i].value === data.key) {
         keyIsSaved = true
@@ -93,65 +101,181 @@ router.put('/', (req, res) => {
       }
     }
 
-    /* =============== datakey =============  */
+    const projectDemo = project
 
-    if(!keyIsSaved) {
-      const key = new keyModel({ value: data.key })
-      project.datakeys.push(key)
-      key.save()
+    if( !keyIsSaved) {
+      keyModel
+      .findOne({ value: data.key})
+      .then( result  => {
+
+        if( !result) { // if this item doesn't exist in db
+          console.log('not in db saved')
+          // create item in DB
+          const key = new keyModel({ value: data.key })
+          projectDemo.datakeys.push(key)
+          console.log('projectDemo1: ', projectDemo)
+          key.save()
+
+        }
+        // else {
+          console.log('exist')
+
+          // if(!keyIsSaved) {
+            console.log('result datakeys: ', projectDemo.datakey)
+            const key = projectDemo.datakeys.find(datakey => datakey.value === data.key)
+            // projectDemo.datakeys._id = key._id
+            projectDemo.datakeys.push(key)
+
+          // } else {
+
+            // const keyIndex = projectDemo.datakeys.findIndex(key => key.value === data.key)
+            // projectDemo.datakeys[keyIndex].update({
+            //   value: data.value
+            // })
+          // }
+        // }
+
+        // projectDemo.save()
+        console.log('projectDemo for key: ', projectDemo)
+
+      })
+
     } else {
-      const keyIndex = project.datakeys.findIndex(key => key.value === data.key)
-      console.log(project.datakeys[keyIndex])
-      project.datakeys[keyIndex].update({
+      const keyIndex = projectDemo.datakeys.findIndex(key => key.value === data.key)
+      projectDemo.datakeys[keyIndex].update({
         value: data.value
       })
+      // projectDemo.save()
+        console.log('projectDemo for key: ', projectDemo)
+
     }
 
-    for(let i = 0; i < project.datavalues.length; i++) {
-      if(project.datavalues[i].key === data.key) {
-        valueIsSaved = true
+
+
+
+    /* =============== language =============  */
+
+    for(let i = 0; i  < project.languages.length; i++) {
+      if(project.languages[i]._id === data.language) {
+        languageIsSaved = true
         break
       }
     }
 
-    /* =============== datavalue =============  */
+    if(!languageIsSaved) {
+      languageModel
+      .findOne({ _id: data.language})
+      .then( result  => {
+        if( !result) { // if this item doesn't exist in db
+          console.log('language not in db saved')
+          // create item in DB
+          const lang = new languageModel({ _id: data.language })
+          projectDemo.languages.push(lang)
+          lang.save()
+        }
+        // else {
+          console.log('language exist')
+          // if(!languageIsSaved) {
+            // console.log('result language: ', projectDemo.languages)
+            const language = projectDemo.languages.find(lang => lang._id === data.language)
+            // projectDemo.datakeys._id = key._id
+            projectDemo.languages.push(language)
 
-    if(!valueIsSaved) {
-      const value = new valueModel({
-        value: data.value,
-        language: data.language,
-        project: data.project,
-        key: data.key
+          // }
+        //   else {
+        //     const langIndex = projectDemo.languages.findIndex(lang => lang._id === data.language)
+        //     projectDemo.languages[langIndex].update({
+        //       _id: data.language
+        //     })
+        //   }
+        // }
+
+        projectDemo.save()
+        console.log('projectDemo: ', projectDemo)
+
+
       })
 
-      project.datavalues.push(value)
-
-      value.save()
-      project.save()
-      res.json(formatProject(project))
     } else {
-      const currentValue = project.datavalues.find(key => key.key === data.key)
-
-      const newData = {
-        value: data.value,
-        language: data.language,
-        project: data.project,
-        key: data.key
-      }
-
-      if(currentValue) {
-        valueModel.findOneAndUpdate({ _id: currentValue._id },{ $set: newData } , {new: true}, () => {
-          const index = project.datavalues.findIndex(key => key.key === data.key)
-          project.datavalues[index] = {
-            _id: currentValue._id,
-            ...newData
-          }
-          project.save()
-          res.json(formatProject(project))
-        })
-      }
-
+      const langIndex = projectDemo.languages.findIndex(lang => lang._id === data.language)
+      projectDemo.languages[langIndex].update({
+        _id: data.language
+      })
+      projectDemo.save()
     }
+
+    res.json(formatProject(projectDemo))
+
+
+      // .then(result => {
+      //   console.log('language result: ', result)
+      //   result ? languageIsInDBSaved = true : languageIsInDBSaved = false
+      //   console.log(languageIsInDBSaved)
+      //   if(!languageIsSaved ) {
+      //     const lang = new languageModel({ _id: data.language })
+      //     projectDemo.languages.push(lang)
+      //     lang.save()
+      //   } else {
+      //     const langIndex = projectDemo.languages.findIndex(lang => lang._id === data.language)
+      //     projectDemo.languages[langIndex].update({
+      //       _id: data.language
+      //     })
+      //   }
+
+      // })
+
+
+
+    /* =============== datavalue =============  */
+
+    // for(let i = 0; i < projectDemo.datavalues.length; i++) {
+    //   if(projectDemo.datavalues[i].key === data.key) {
+    //     valueIsSaved = true
+    //     break
+    //   }
+    // }
+
+    // if(!valueIsSaved) {
+    //   const value = new valueModel({
+    //     value: data.value,
+    //     language: data.language,
+    //     project: data.project,
+    //     key: data.key
+    //   })
+
+    //   projectDemo.datavalues.push(value)
+
+    //   value.save()
+    //   projectDemo.save()
+    //   res.json(formatProject(projectDemo))
+    // } else {
+    //   const currentValue = projectDemo.datavalues.find(key => key.key === data.key)
+
+    //   const newData = {
+    //     value: data.value,
+    //     language: data.language,
+    //     project: data.project,
+    //     key: data.key
+    //   }
+
+    //   if(currentValue) {
+    //     valueModel.findOneAndUpdate({ _id: currentValue._id },{ $set: newData } , {new: true}, () => {
+    //       const index = projectDemo.datavalues.findIndex(key => key.key === data.key)
+    //       projectDemo.datavalues[index] = {
+    //         _id: currentValue._id,
+    //         ...newData
+    //       }
+    //       projectDemo.save()
+    //       console.log('project: ', project)
+    //       console.log('projectDemo: ', projectDemo)
+    //       res.json(formatProject(projectDemo))
+    //     })
+    //   }
+    // }
+
+
+
+
   })
 
   // projectsModel

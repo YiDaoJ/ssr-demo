@@ -4,7 +4,12 @@ import Typography from 'material-ui/Typography/Typography';
 import Divider from 'material-ui/Divider';
 
 
-const Dashboard = ({onCreateProjectClick, onDeleteProjectClick, onUpdateProjectClick, ...props}) => {
+const Dashboard = ({
+  onCreateProjectClick,
+  onDeleteProjectClick,
+  onUpdateProjectClick,
+  onUpdateProjectClick2,
+  ...props}) => {
 
   const { allProjects } = props
   // console.log(allProjects)
@@ -31,6 +36,7 @@ const Dashboard = ({onCreateProjectClick, onDeleteProjectClick, onUpdateProjectC
         <Button raised color="inherit" onClick={onDeleteProjectClick}> Delete Project</Button>
         <Divider style={{margin: '20px auto'}} />
         <Button raised onClick={onUpdateProjectClick}>Update: add data Item</Button>{'\t'}
+        <Button raised onClick={onUpdateProjectClick2}>Update: add data Item 2</Button>{'\t'}
         {/* <Button raised >Update 2</Button>{'\t'}
         <Button raised >Update 3</Button> */}
       </div>

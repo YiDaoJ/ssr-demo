@@ -14,7 +14,7 @@ const Schema = mongoose.Schema;
 const projectSchema = new Schema({
   _id: { type: String }, // project-title
   languages: [{ type: String, ref: 'languages' }],
-  datakeys:  [{ type: String, ref: 'datakeys' }],
+  datakeys:  [{ type: String, ref: 'datakeys', unique: true }],
   datavalues: [{ type: Schema.Types.ObjectId, ref: 'datavalues' }]
 }, { usePushEach: true });
 

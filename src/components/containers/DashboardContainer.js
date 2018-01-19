@@ -32,23 +32,24 @@ class DashboardContainer extends Component {
     updateProject(allProjects[1], {
       data:
         {
-            "value": "Speichern",
-            "key": "GLOBAL__BTN_SAVE",
-            "language": "de",
-            "project": allProjects[1]._id
+          "value": "testo",
+          "key": "GLOBAL__BTN_LOGIN",
+          "language": "es",
+          "project": allProjects[1]._id
         }
+    })
+  }
 
-      // data: {
-      //   datavalues: [
-      //     {
-      //       key: 'GLOBAL__BTN_DUPLICATE',
-      //       value: 'Key exists already',
-      //       language: 'en',
-      //       project: allProjects[1]._id
-      //     }
-      //   ]
-      // }
-
+  onUpdateProjectClick2 = () => {
+    const { updateProject, allProjects } = this.props
+    updateProject(allProjects[1], {
+      data:
+        {
+          "value": "保存",
+          "key": "GLOBAL__BTN_SAVE",
+          "language": "cn",
+          "project": allProjects[1]._id
+        }
     })
   }
 
@@ -64,6 +65,7 @@ class DashboardContainer extends Component {
           onCreateProjectClick={this.onCreateProjectClick}
           onDeleteProjectClick={this.onDeleteProjectClick}
           onUpdateProjectClick={this.onUpdateProjectClick}
+          onUpdateProjectClick2={this.onUpdateProjectClick2}
         />
       </div>
     );
