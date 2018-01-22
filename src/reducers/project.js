@@ -48,7 +48,7 @@ export default (state={projects: []}, action) =>  {
 
     case 'UPDATE_PROJECT_SUCCEEDED':
       index = state.projects.findIndex(project => project._id === action.project._id)
-      const proj = {...action.project, ...action.payload}
+      const proj = {...action.project}
       console.log('test from reducer: ', proj)
       return {
         ...state,

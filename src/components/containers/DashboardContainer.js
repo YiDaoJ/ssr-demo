@@ -49,9 +49,9 @@ class DashboardContainer extends Component {
           // "key": "GLOBAL__BTN_LOGIN",
           // "language": "es",
           // "project": allProjects[1]._id
-          "value": "登录",
-          "key": "GLOBAL__BTN_LOGIN",
-          "language": "cn",
+          "value": "Hilfe",
+          "key": "GLOBAL__BTN_HELP",
+          "language": "de",
           "project": allProjects[1]._id
         }
     })

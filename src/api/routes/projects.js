@@ -102,7 +102,7 @@ router.put('/', (req, res) => {
         break
       }
     }
-
+    console.log('datakeysaved? ', keyIsSaved)
     if(!keyIsSaved) {
       keyModel
       .findOne({ value: data.key})
@@ -113,7 +113,9 @@ router.put('/', (req, res) => {
           key.save()
           projectDemo.datakeys.push(key)
         } else {
+          console.log('projectDemo before push: ', projectDemo)
           projectDemo.datakeys.push(result)
+          console.log('projectDemo after push: ', projectDemo)
         }
         // projectDemo.save()
       })
@@ -126,6 +128,56 @@ router.put('/', (req, res) => {
         project.datakeys[keyIndex] = result // ?
       })
     }
+
+    // res.json(formatProject(projectDemo))
+
+    /* =============== datavalue =============  */
+
+    for(let i = 0; i < projectDemo.datavalues.length; i++) {
+      if(projectDemo.datavalues[i].key === data.key) {
+        valueIsSaved = true
+        break
+      }
+    }
+    console.log('datavalue saved? ', valueIsSaved)
+    if(!valueIsSaved) {
+      const value = new valueModel({
+        value: data.value,
+        language: data.language,
+        project: data.project,
+        key: data.key
+      })
+
+      projectDemo.datavalues.push(value)
+      value.save()
+      // projectDemo.save()
+      // res.json(formatProject(projectDemo))
+    } else {
+      const currentValue = projectDemo.datavalues.find(key => key.key === data.key)
+
+      const newData = {
+        value: data.value,
+        language: data.language,
+        project: data.project,
+        key: data.key
+      }
+
+      if(currentValue) {
+        valueModel
+        .findOneAndUpdate({ _id: currentValue._id },{ $set: newData } , {new: true}, () => {
+          const index = projectDemo.datavalues.findIndex(key => key.key === data.key)
+          projectDemo.datavalues[index] = {
+            _id: currentValue._id,
+            ...newData
+          }
+          // projectDemo.save()
+          // console.log('project: ', project)
+          // console.log('projectDemo: ', projectDemo)
+
+        })
+      }
+    }
+
 
     /* =============== language =============  */
 
@@ -157,96 +209,10 @@ router.put('/', (req, res) => {
         const langIndex = projectDemo.languages.findIndex(lang => lang._id === data.language)
         projectDemo.languages[langIndex] = result // ?
         projectDemo.save()
-
       })
     }
-
     res.json(formatProject(projectDemo))
-
-
-      // .then(result => {
-      //   console.log('language result: ', result)
-      //   result ? languageIsInDBSaved = true : languageIsInDBSaved = false
-      //   console.log(languageIsInDBSaved)
-      //   if(!languageIsSaved ) {
-      //     const lang = new languageModel({ _id: data.language })
-      //     projectDemo.languages.push(lang)
-      //     lang.save()
-      //   } else {
-      //     const langIndex = projectDemo.languages.findIndex(lang => lang._id === data.language)
-      //     projectDemo.languages[langIndex].update({
-      //       _id: data.language
-      //     })
-      //   }
-
-      // })
-
-
-
-    /* =============== datavalue =============  */
-
-    // for(let i = 0; i < projectDemo.datavalues.length; i++) {
-    //   if(projectDemo.datavalues[i].key === data.key) {
-    //     valueIsSaved = true
-    //     break
-    //   }
-    // }
-
-    // if(!valueIsSaved) {
-    //   const value = new valueModel({
-    //     value: data.value,
-    //     language: data.language,
-    //     project: data.project,
-    //     key: data.key
-    //   })
-
-    //   projectDemo.datavalues.push(value)
-
-    //   value.save()
-    //   projectDemo.save()
-    //   res.json(formatProject(projectDemo))
-    // } else {
-    //   const currentValue = projectDemo.datavalues.find(key => key.key === data.key)
-
-    //   const newData = {
-    //     value: data.value,
-    //     language: data.language,
-    //     project: data.project,
-    //     key: data.key
-    //   }
-
-    //   if(currentValue) {
-    //     valueModel.findOneAndUpdate({ _id: currentValue._id },{ $set: newData } , {new: true}, () => {
-    //       const index = projectDemo.datavalues.findIndex(key => key.key === data.key)
-    //       projectDemo.datavalues[index] = {
-    //         _id: currentValue._id,
-    //         ...newData
-    //       }
-    //       projectDemo.save()
-    //       console.log('project: ', project)
-    //       console.log('projectDemo: ', projectDemo)
-    //       res.json(formatProject(projectDemo))
-    //     })
-    //   }
-    // }
-
-
-
-
   })
-
-  // projectsModel
-  //   .findOneAndUpdate({_id: req.body._id}, { $set: data }, {new: true})
-  //   // .findByIdAndUpdate(req.query._id, projectsModel.updateProject, {new: true})
-  //   // .exec((err, project) => {
-  //   //   if (err) return
-  //   //   console.log(err);
-
-  //   //   // console.log(project)
-  //   //   res.json(project)
-  //   // })
-  //   .then(project=> res.json(project))
-  //   .catch(err => res.status(400).json(err));
 })
 
 router.get('/:title', (req, res) => {
