@@ -67,8 +67,22 @@ router.post('/', (req, res) => {
 router.delete('/', (req, res) => {
   projectsModel
     .findOneAndRemove({_id: req.query._id})
-    .then(project=> res.json(project))
-    .catch(err => res.status(400).json(err));
+    .exec((error, project) => {
+      if(error)
+        res.status(400).json(err)
+
+      if(project) {
+        console.log('project to be removed: ', project)
+        project.datavalues.forEach( key => {
+          console.log('key: ', key)
+          valueModel
+            .findByIdAndRemove(key)
+        })
+        res.json(project)
+      }
+    })
+    // .then(project=> res.json(project))
+    // .catch(err => res.status(400).json(err));
 })
 
 // update
