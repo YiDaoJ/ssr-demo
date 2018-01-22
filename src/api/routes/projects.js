@@ -90,118 +90,75 @@ router.put('/', (req, res) => {
     let valueIsSaved = false
     let languageIsSaved = false
 
+    const projectDemo = project
+    console.log('initial projectDemo: ', projectDemo)
 
     /* =============== datakey =============  */
 
     // check if datakey is in Project saved
-    for(let i = 0; i  < project.datakeys.length; i++) {
-      if(project.datakeys[i].value === data.key) {
+    for(let i = 0; i  < projectDemo.datakeys.length; i++) {
+      if(projectDemo.datakeys[i].value === data.key) {
         keyIsSaved = true
         break
       }
     }
 
-    const projectDemo = project
-
-    if( !keyIsSaved) {
+    if(!keyIsSaved) {
       keyModel
       .findOne({ value: data.key})
-      .then( result  => {
-
-        if( !result) { // if this item doesn't exist in db
-          console.log('not in db saved')
-          // create item in DB
+      .exec((error, result)  => {
+        console.log('result 1: ', result, error)
+        if(!result) { // if this item doesn't exist in db
           const key = new keyModel({ value: data.key })
-          projectDemo.datakeys.push(key)
-          console.log('projectDemo1: ', projectDemo)
           key.save()
-
+          projectDemo.datakeys.push(key)
+        } else {
+          projectDemo.datakeys.push(result)
         }
-        // else {
-          console.log('exist')
-
-          // if(!keyIsSaved) {
-            console.log('result datakeys: ', projectDemo.datakey)
-            const key = projectDemo.datakeys.find(datakey => datakey.value === data.key)
-            // projectDemo.datakeys._id = key._id
-            projectDemo.datakeys.push(key)
-
-          // } else {
-
-            // const keyIndex = projectDemo.datakeys.findIndex(key => key.value === data.key)
-            // projectDemo.datakeys[keyIndex].update({
-            //   value: data.value
-            // })
-          // }
-        // }
-
         // projectDemo.save()
-        console.log('projectDemo for key: ', projectDemo)
-
       })
-
     } else {
-      const keyIndex = projectDemo.datakeys.findIndex(key => key.value === data.key)
-      projectDemo.datakeys[keyIndex].update({
-        value: data.value
+      keyModel
+      .findOne({ value: data.key})
+      .exec((error, result)  => {
+        console.log('result 2: ', result, error)
+        const keyIndex = projectDemo.datakeys.findIndex(key => key.value === data.key)
+        project.datakeys[keyIndex] = result // ?
       })
-      // projectDemo.save()
-        console.log('projectDemo for key: ', projectDemo)
-
     }
-
-
-
 
     /* =============== language =============  */
 
-    for(let i = 0; i  < project.languages.length; i++) {
-      if(project.languages[i]._id === data.language) {
+    for(let i = 0; i  < projectDemo.languages.length; i++) {
+      if(projectDemo.languages[i] === data.language) {
         languageIsSaved = true
         break
       }
     }
-
+    console.log('lang is saved: ', languageIsSaved)
     if(!languageIsSaved) {
       languageModel
       .findOne({ _id: data.language})
-      .then( result  => {
+      .exec((error, result)  => {
         if( !result) { // if this item doesn't exist in db
-          console.log('language not in db saved')
-          // create item in DB
           const lang = new languageModel({ _id: data.language })
           projectDemo.languages.push(lang)
           lang.save()
+        } else {
+          projectDemo.languages.push(result)
         }
-        // else {
-          console.log('language exist')
-          // if(!languageIsSaved) {
-            // console.log('result language: ', projectDemo.languages)
-            const language = projectDemo.languages.find(lang => lang._id === data.language)
-            // projectDemo.datakeys._id = key._id
-            projectDemo.languages.push(language)
-
-          // }
-        //   else {
-        //     const langIndex = projectDemo.languages.findIndex(lang => lang._id === data.language)
-        //     projectDemo.languages[langIndex].update({
-        //       _id: data.language
-        //     })
-        //   }
-        // }
-
         projectDemo.save()
-        console.log('projectDemo: ', projectDemo)
-
-
       })
 
     } else {
-      const langIndex = projectDemo.languages.findIndex(lang => lang._id === data.language)
-      projectDemo.languages[langIndex].update({
-        _id: data.language
+      languageModel
+      .findOne({ _id: data.language})
+      .exec((error, result)  => {
+        const langIndex = projectDemo.languages.findIndex(lang => lang._id === data.language)
+        projectDemo.languages[langIndex] = result // ?
+        projectDemo.save()
+
       })
-      projectDemo.save()
     }
 
     res.json(formatProject(projectDemo))

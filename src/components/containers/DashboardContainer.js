@@ -45,8 +45,12 @@ class DashboardContainer extends Component {
     updateProject(allProjects[1], {
       data:
         {
-          "value": "保存",
-          "key": "GLOBAL__BTN_SAVE",
+          // "value": "test",
+          // "key": "GLOBAL__BTN_LOGIN",
+          // "language": "es",
+          // "project": allProjects[1]._id
+          "value": "登录",
+          "key": "GLOBAL__BTN_LOGIN",
           "language": "cn",
           "project": allProjects[1]._id
         }
