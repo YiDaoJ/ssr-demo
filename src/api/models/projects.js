@@ -14,16 +14,10 @@ const Schema = mongoose.Schema;
 const projectSchema = new Schema({
   _id: { type: String }, // project-title
   languages: [{ type: String, ref: 'languages' }],
-  datakeys:  [{ type: Schema.Types.ObjectId, ref: 'datakeys' }],
+  datakeys:  [{ type: String, ref: 'datakeys' }],
+  // datakeys:  [{ type: Schema.Types.ObjectId, ref: 'datakeys' }],
   datavalues: [{ type: Schema.Types.ObjectId, ref: 'datavalues' }]
 }, { usePushEach: true });
 
-// projectSchema.methods.updateProject = function updateProject(project, payload) {
-//   console.log('test from models: ', project, payload)
-//   return {
-//     ...project,
-//     payload
-//   }
-// }
 
 export default mongoose.model('projects', projectSchema);

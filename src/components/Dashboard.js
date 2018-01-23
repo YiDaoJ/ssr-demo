@@ -9,6 +9,7 @@ const Dashboard = ({
   onDeleteProjectClick,
   onUpdateProjectClick,
   onUpdateProjectClick2,
+  onUpdateProjectClick3,
   ...props}) => {
 
   const { allProjects } = props
@@ -37,6 +38,7 @@ const Dashboard = ({
         <Divider style={{margin: '20px auto'}} />
         <Button raised onClick={onUpdateProjectClick}>Update: add data Item</Button>{'\t'}
         <Button raised onClick={onUpdateProjectClick2}>Update: add data Item 2</Button>{'\t'}
+        <Button raised onClick={onUpdateProjectClick3}>Update: add data Item 3</Button>{'\t'}
         {/* <Button raised >Update 2</Button>{'\t'}
         <Button raised >Update 3</Button> */}
       </div>
