@@ -50,12 +50,12 @@ const ROOT = document.getElementById('root')
 // renderMethod(
   ReactDOM.hydrate(
     <MuiThemeProvider theme={theme} >
-    <Provider store={store}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </Provider>
-  </MuiThemeProvider>,
+      <Provider store={store}>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </Provider>
+    </MuiThemeProvider>,
   document.getElementById('root')
 )
 

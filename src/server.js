@@ -98,9 +98,12 @@ const renderer = (req, store) => {
 
 }
 
+process.env.BLUEBIRD_DEBUG = 1
+
 
 const app = express()
 app.use(bodyParser.json())
+mongoose.set('debug', true)
 mongoose.Promise = Promise
 mongoose.connect('mongodb://localhost/i18n_demo', { useMongoClient: true })
 
@@ -116,9 +119,7 @@ app.use('/api/datavalues', dataValues);
 app.get('*', (req, res) => {
   const store = createStore(rootReducer, {}, applyMiddleware(sagaMiddleware));
   // sagaMiddleware.run(helloSaga)
-
   res.status(200)
-
   res.send(renderer(req, store))
 })
 

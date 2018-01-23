@@ -8,23 +8,18 @@ import { userLogin } from '../../actions/auth'
 
 class LoginPageContainer extends Component {
 
-  submit = loginData =>
-    this.props.userLogin(loginData).then(() => this.props.history.push("/dashboard"))
-  // submit = data => console.log(data)
-
   render() {
-    return <LoginPage {...this.props} submit={this.submit} />
+    return <LoginPage {...this.props} />
   }
 }
 
 // const mapStateToProps = state => ({
-//   credentials: state.user.credentials
-// }) // null
+//   hasError: state.
+// })
+
 
 const mapDispatchToProps = dispatch => ({
   userLogin: credentials => dispatch(userLogin(credentials))
-  // login: credentials =>
-  //   api.user.login(credentials).then(user => dispatch(userLoggedIn(user)))
 })
 
 

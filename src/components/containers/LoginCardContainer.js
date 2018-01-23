@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { func } from 'prop-types'
 import Validator from 'validator'
-import bcrypt from 'bcryptjs'
+import { userLogin } from '../../actions/auth'
 import LoginCard from '../LoginCard'
-import { error } from 'util';
+
 
 class LoginCardContainer extends Component {
 
@@ -24,6 +25,9 @@ class LoginCardContainer extends Component {
   //   this.generatePWHash(this.state.loginData.password)
   // }
 
+  // submit = loginData =>
+  //   this.props.userLogin(loginData).then(console.log('test'))
+
   onChange = event => {
     this.setState({
       loginData: {
@@ -34,38 +38,16 @@ class LoginCardContainer extends Component {
   }
 
   onSubmit = () => {
+
     const errors = this.validate(this.state.loginData, this.props.lang)
-    // const salt = bcrypt.genSaltSync(10)
-    // const passwordHash =
-    //   this.state.loginData.password &&
-    //   bcrypt.hashSync(this.state.loginData.password, salt)
 
-    //   console.log(bcrypt.compareSync('0000', passwordHash))
+    this.setState({ errors })
 
-
-    this.setState({ errors },
-
-      () => {
-
-        if (Object.keys(errors).length === 0) {
-          this.props.submit(this.state.loginData)
-          .catch(err =>
-            this.setState({ errors: err.response.data.errors })
-          )
-        }
-
-        // try {
-        //   if (Object.keys(errors).length === 0) {
-        //     // this.props.submit(this.state.loginData)
-        //     this.props.userLogin(this.state.loginData)
-        //   }
-        // } catch (err) {
-        //   this.setState({ errors: err.response.data.errors })
-        // }
-
-      }
-
-    )
+      if (Object.keys(errors).length === 0) {
+        this.props
+        .userLogin(this.state.loginData)
+        // .catch( err=> this.setState({ errors: err.response.data.errors }))
+    }
   }
 
   validate = (loginData, lang) => {
@@ -128,4 +110,8 @@ LoginCardContainer.propTypes = {
   submit: func
 }
 
+// const mapDispatchToProps = dispatch => ({
+//   userLogin: loginData => dispatch(userLogin(loginData))
+// })
+// export default connect(null, mapDispatchToProps)(LoginCardContainer)
 export default LoginCardContainer
