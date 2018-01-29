@@ -29,39 +29,39 @@ class DashboardContainer extends Component {
 
   onUpdateProjectClick = () => {
     const { updateProject, allProjects } = this.props
-    updateProject(allProjects[1], {
+    updateProject(allProjects[0], {
       data:
         {
           "value": "test!!!",
           "key": "GLOBAL__BTN_LOGIN",
           "language": "es",
-          "project": allProjects[1]._id
+          "project": allProjects[0]._id
         }
     })
   }
 
   onUpdateProjectClick2 = () => {
     const { updateProject, allProjects } = this.props
-    updateProject(allProjects[1], {
+    updateProject(allProjects[0], {
       data:
         {
           "value": "test",
           "key": "GLOBAL__BTN_LOGIN",
           "language": "es",
-          "project": allProjects[1]._id
+          "project": allProjects[0]._id
         }
     })
   }
 
   onUpdateProjectClick3 = () => {
     const { updateProject, allProjects } = this.props
-    updateProject(allProjects[1], {
+    updateProject(allProjects[0], {
       data:
         {
           "value": "Hilfe",
           "key": "GLOBAL__BTN_HELP",
           "language": "de",
-          "project": allProjects[1]._id
+          "project": allProjects[0]._id
         }
     })
   }

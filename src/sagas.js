@@ -63,6 +63,7 @@ function* watchDeleteProjectRequest(data) {
 
 function* updateProjectRequest(data) {
   try {
+    console.log('test from saga - updateProjectRequest', data)
     const proj = yield call(api.project.put, data)
     console.log('test from saga - updateProjectRequest', proj)
     // const proj = yield call(api.project.put, project)

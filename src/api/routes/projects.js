@@ -33,8 +33,10 @@ router.get('/', (req, res) => {
   projectsModel
     .find()
     .populate('languages', '_id')
+    .populate('datakeys', 'value')
     .populate('datavalues', ['value', 'key', 'language'])
     .exec((err, data) => {
+      console.log('-----data: ', data)
       if (err) return
       console.log(err);
 
@@ -51,7 +53,7 @@ router.get('/', (req, res) => {
       // })
 
       const formatedProjects = formatProject(data)
-      res.json(formatedProjects)
+      res.json(data)
     })
 });
 
@@ -72,7 +74,6 @@ router.delete('/', (req, res) => {
         res.status(400).json(err)
 
       if(project) {
-        // console.log('project to be removed: ', project)
         project.datavalues.forEach( key => {
           valueModel
             .findByIdAndRemove(key)
@@ -201,7 +202,7 @@ function languageUpdate(projectDemo, languageIsSaved, data) {
     .findOne({ _id: data.language})
     .exec((error, result)  => {
       if(error)
-            res.status(400).json(error)
+        res.status(400).json(error)
 
       if( !result) { // if this item doesn't exist in db
         const lang = new languageModel({ _id: data.language })
@@ -209,7 +210,7 @@ function languageUpdate(projectDemo, languageIsSaved, data) {
         lang.save()
       } else {
         projectDemo.languages.push(result)
-        console.log('after insert lang: ', projectDemo)
+        // console.log('after insert lang: ', projectDemo)
       }
       // projectDemo.save()
     })
@@ -219,10 +220,11 @@ function languageUpdate(projectDemo, languageIsSaved, data) {
     .findOne({ _id: data.language})
     .exec((error, result)  => {
       if(error)
-            res.status(400).json(error)
+        res.status(400).json(error)
 
       const langIndex = projectDemo.languages.findIndex(lang => lang._id === data.language)
       projectDemo.languages[langIndex]._id = result._id // ?
+      // projectDemo.save()
     })
   }
 }
@@ -252,49 +254,14 @@ router.put('/', (req, res) => {
 
     keyUpdate(projectDemo, keyIsSaved, data)
       .then(() => {
-        for(let i = 0; i  < projectDemo.languages.length; i++) {
-          if(projectDemo.languages[i]._id === data.language) {
-            languageIsSaved = true
-            break
-          }
-        }
-        console.log('lang is saved: ', languageIsSaved)
-        if(!languageIsSaved) {
-          return languageModel
-          .findOne({ _id: data.language})
-          .exec((error, result)  => {
-            if(error)
-              res.status(400).json(error)
-
-            if( !result) { // if this item doesn't exist in db
-              const lang = new languageModel({ _id: data.language })
-              projectDemo.languages.push(lang)
-              lang.save()
-            } else {
-              projectDemo.languages.push(result)
-              console.log('after insert lang: ', projectDemo)
-            }
-            // projectDemo.save()
-          })
-
-        } else {
-          return languageModel
-          .findOne({ _id: data.language})
-          .exec((error, result)  => {
-            if(error)
-              res.status(400).json(error)
-
-            const langIndex = projectDemo.languages.findIndex(lang => lang._id === data.language)
-            projectDemo.languages[langIndex]._id = result._id // ?
-            // projectDemo.save()
-          })
-        }
+        languageUpdate(projectDemo, languageIsSaved, data)
+        .then(() => {
+          valueUpdate(projectDemo, valueIsSaved, data)
+          console.log('last check: ', projectDemo)
+          res.json(formatProject(projectDemo))
+        })
       })
-      .then(() => {
-        valueUpdate(projectDemo, keyIsSaved, data)
-        console.log('last check: ', projectDemo)
-        res.json(formatProject(projectDemo))
-      })
+
   })
 })
 
